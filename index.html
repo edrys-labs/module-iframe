@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>IFrame</title>
+
+    <meta name="fetch" content="true" />
+    <meta
+      name="description"
+      content="Helper for embedding any kind of external resource (user either <code>src</code> or <code>srcdoc</code>). For more information see <br><a href='https://github.com/edrys-labs/module-iframe' target='_blank'>https://github.com/edrys-labs/module-iframe</a>"
+    />
+    <meta name="show-in" content="*" />
+
+    <style>
+      iframe,
+      body {
+        width: 100%;
+        height: 100vh;
+        border: none;
+        margin: 0px;
+      }
+    </style>
+
+    <script src="https://edrys-labs.github.io/module/edrys.js"></script>
+  </head>
+  <body>
+    <iframe src="" frameborder="0"></iframe>
+
+    <script>
+      Edrys.onReady(() => {
+        const iframe = document.querySelector('iframe')
+
+        if (Edrys.module.config.src) {
+          iframe.src = Edrys.module.config.src || ''
+        } else if (Edrys.module.config.srcdoc) {
+          iframe.srcdoc = Edrys.module.config.srcdoc || ''
+        } else {
+          console.warn('No src or srcdoc provided')
+        }
+      })
+    </script>
+  </body>
+</html>
