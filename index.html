@@ -12,24 +12,107 @@
       content="Helper for embedding any kind of external resource (user either <code>src</code> or <code>srcdoc</code>). For more information see <br><a href='https://github.com/edrys-labs/module-iframe' target='_blank'>https://github.com/edrys-labs/module-iframe</a>"
     />
     <meta name="show-in" content="*" />
+    <meta
+      name="module-config"
+      content="{
+        'config': {
+          'src': {
+            'type': 'text',
+            'hint': 'URL of the page to embed, for every role (the site must allow being embedded)',
+          },
+          'srcdoc': {
+            'type': 'code-area',
+            'hint': 'HTML to show instead, used when src is empty',
+          }
+        },
+        'teacherConfig': {
+          'src': {
+            'type': 'text',
+            'hint': 'Page for teachers only; replaces the general config',
+          },
+          'srcdoc': {
+            'type': 'code-area',
+            'hint': 'HTML for teachers only; replaces the general config',
+          }
+        },
+        'studentConfig': {
+          'src': {
+            'type': 'text',
+            'hint': 'Page for students only; replaces the general config',
+          },
+          'srcdoc': {
+            'type': 'code-area',
+            'hint': 'HTML for students only; replaces the general config',
+          }
+        },
+        'stationConfig': {
+          'src': {
+            'type': 'text',
+            'hint': 'Page for stations only; replaces the general config',
+          },
+          'srcdoc': {
+            'type': 'code-area',
+            'hint': 'HTML for stations only; replaces the general config',
+          }
+        }
+      }"
+    />
+
+    <link rel="stylesheet" href="https://edrys-labs.github.io/module/vendor/water.min.css" />
 
     <style>
-      iframe,
+      /* the embedded page fills the module; water.css would centre and pad the body */
+      html,
       body {
+        height: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      /* block, so no line box adds a few pixels and a scrollbar below it */
+      iframe {
+        display: block;
         width: 100%;
-        height: 100vh;
-        border: none;
-        margin: 0px;
+        height: 100%;
+        border: 0;
+      }
+
+      /* the display rule above would otherwise override the hidden attribute */
+      [hidden] {
+        display: none !important;
+      }
+
+      .message {
+        margin: 0;
+        padding: 1rem;
+      }
+
+      /* replaced by the page or the empty message; appears only after 0.5s, so fast loads don't flicker */
+      .loading {
+        opacity: 0;
+        animation: show-loading 0s 0.5s forwards;
+      }
+
+      @keyframes show-loading {
+        to {
+          opacity: 0.6;
+        }
       }
     </style>
 
     <script src="https://edrys-labs.github.io/module/edrys.js"></script>
   </head>
   <body>
+    <p id="message" class="message loading">Loading…</p>
+
     <!-- the same permissions edrys-Lite grants this module, passed on to the embedded page -->
     <iframe
+      title="Embedded page"
       allow="camera; microphone; fullscreen; display-capture; accelerometer; autoplay; encrypted-media; geolocation; gyroscope; magnetometer; midi; serial; vr; clipboard-read; clipboard-write"
       allowfullscreen
+      hidden
     ></iframe>
 
     <script>
@@ -38,6 +121,7 @@
 
       Edrys.onReady(() => {
         const iframe = document.querySelector('iframe')
+        const message = document.getElementById('message')
 
         // a role config that sets src or srcdoc replaces the general one
         const general = asObject(Edrys.module.config)
@@ -49,8 +133,14 @@
         } else if (config.srcdoc) {
           iframe.srcdoc = config.srcdoc
         } else {
-          console.warn('No src or srcdoc provided')
+          message.classList.remove('loading')
+          message.textContent =
+            'Nothing to show yet: set src (a URL) or srcdoc (HTML) in the module settings.'
+          return
         }
+
+        message.hidden = true
+        iframe.hidden = false
       })
     </script>
   </body>
