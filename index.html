@@ -26,16 +26,28 @@
     <script src="https://edrys-labs.github.io/module/edrys.js"></script>
   </head>
   <body>
-    <iframe src="" frameborder="0"></iframe>
+    <!-- the same permissions edrys-Lite grants this module, passed on to the embedded page -->
+    <iframe
+      allow="camera; microphone; fullscreen; display-capture; accelerometer; autoplay; encrypted-media; geolocation; gyroscope; magnetometer; midi; serial; vr; clipboard-read; clipboard-write"
+      allowfullscreen
+    ></iframe>
 
     <script>
+      // configs that could not be parsed stay strings, missing ones are null or ''
+      const asObject = (config) => (config && typeof config === 'object' ? config : {})
+
       Edrys.onReady(() => {
         const iframe = document.querySelector('iframe')
 
-        if (Edrys.module.config.src) {
-          iframe.src = Edrys.module.config.src || ''
-        } else if (Edrys.module.config.srcdoc) {
-          iframe.srcdoc = Edrys.module.config.srcdoc || ''
+        // a role config that sets src or srcdoc replaces the general one
+        const general = asObject(Edrys.module.config)
+        const role = asObject(Edrys.module[Edrys.role.toLowerCase() + 'Config'])
+        const config = role.src || role.srcdoc ? role : general
+
+        if (config.src) {
+          iframe.src = config.src
+        } else if (config.srcdoc) {
+          iframe.srcdoc = config.srcdoc
         } else {
           console.warn('No src or srcdoc provided')
         }
