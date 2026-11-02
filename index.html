@@ -59,6 +59,9 @@
     />
 
     <link rel="stylesheet" href="https://edrys-labs.github.io/module/vendor/water.min.css" />
+    <!-- colours and fonts in the classroom's light or dark theme; the embedded
+         page keeps its own look -->
+    <link rel="stylesheet" href="https://edrys-labs.github.io/module/edrys-module.css" />
 
     <style>
       /* the embedded page fills the module; water.css would centre and pad the body */
@@ -71,12 +74,15 @@
         overflow: hidden;
       }
 
-      /* block, so no line box adds a few pixels and a scrollbar below it */
+      /* block, so no line box adds a few pixels and a scrollbar below it.
+         White: a page without a background of its own expects a light one,
+         in a dark classroom too */
       iframe {
         display: block;
         width: 100%;
         height: 100%;
         border: 0;
+        background: #fff;
       }
 
       /* the display rule above would otherwise override the hidden attribute */
@@ -86,7 +92,8 @@
 
       .message {
         margin: 0;
-        padding: 1rem;
+        padding: 16px 18px;
+        color: var(--edrys-muted);
       }
 
       /* replaced by the page or the empty message; appears only after 0.5s, so fast loads don't flicker */
@@ -97,7 +104,7 @@
 
       @keyframes show-loading {
         to {
-          opacity: 0.6;
+          opacity: 1;
         }
       }
     </style>

@@ -30,6 +30,10 @@ A role tab that sets `src` or `srcdoc` **replaces** the general tab for that rol
 an exercise and teachers the solution. Empty role tabs fall back to the general tab. Changes are shown to everyone
 as soon as the settings are saved. Without any page configured, the module says what to set.
 
+The module follows the classroom's light or dark theme (the operating system's when opened on its own). The
+embedded page keeps its own look: a page without a background of its own is shown on white, in a dark classroom
+too.
+
 If you edit the class configuration as YAML instead:
 
 ```yaml
